@@ -30,6 +30,29 @@ namespace fastrtps {
 
 /**
  * A helper to calculate the block size of a memory pool given the side of the node and
+ * a number of nodes.
+ *
+ * @tparam MemoryPool memory_pool specialization
+ *
+ * @param node_size   Size of the node for the memory pool
+ * @param num_nodes   Number of nodes per block in the pool
+ *
+ * @return the block size to pass to the memory pool constructor
+ */
+template <typename MemoryPool>
+constexpr std::size_t memory_pool_block_size(
+        std::size_t node_size,
+        std::size_t num_nodes,
+        std::size_t padding = foonathan::memory::detail::memory_block_stack::implementation_offset)
+{
+    return num_nodes
+           * ((node_size > MemoryPool::min_node_size ? node_size : MemoryPool::min_node_size) // Room for elements
+           * (foonathan::memory::detail::debug_fence_size ? 3 : 1))                           // Room for debug info
+           + padding;                                                                         // Room for padding
+}
+
+/**
+ * A helper to calculate the block size of a memory pool given the side of the node and
  * a resource limits configuration.
  *
  * @tparam MemoryPool memory_pool specialization
