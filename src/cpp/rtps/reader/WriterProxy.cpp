@@ -53,7 +53,7 @@ WriterProxy::~WriterProxy()
     delete(heartbeat_response_);
 }
 
-constexpr size_t changes_node_size = memory::set_node_size<std::pair<size_t, SequenceNumber_t> >::value;
+constexpr size_t changes_node_size = memory_set_node_size<SequenceNumber_t>();
 
 WriterProxy::WriterProxy(
         StatefulReader* reader,

@@ -76,6 +76,23 @@ std::size_t memory_pool_block_size(
     return memory_pool_block_size<MemoryPool>(node_size, num_elems);
 }
 
+/**
+ * A helper to calculate the node size of a std::set<T>
+ *
+ * @tparam T   Type for which the std::set<T> node size is to be calculated
+ *
+ * @return The node size for std::set<T>
+ */
+template <typename T>
+constexpr std::size_t memory_set_node_size()
+{
+#ifdef FOONATHAN_MEMORY_NO_NODE_SIZE
+    return sizeof(std::set<T>::value_type) + std::integral_constant<std::size_t, 32>::value;
+#else
+    return foonathan::memory::set_node_size<std::set<T>::value_type>::value;
+#endif
+}
+
 }  // namespace fastrtps
 }  // namespace eprosima
 
