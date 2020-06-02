@@ -52,11 +52,7 @@ public:
             std::size_t nodes_to_allocate,
             const bool& flag,
             std::size_t padding = foonathan::memory::detail::memory_block_stack::implementation_offset)
-        : block_size_(nodes_to_allocate
-                * ((node_size > allocator_type::min_node_size ? node_size : allocator_type::min_node_size)
-                // Needs more space in debug info. It allocates space to detect overflow.
-                * (foonathan::memory::detail::debug_fence_size ? 3 : 1))
-                + padding)
+        : block_size_(memory_pool_block_size<allocator_type>(node_size, nodes_to_allocate, padding))
         , node_allocator_(new allocator_type(node_size, block_size_))
         , initialization_is_done_(flag)
     {
@@ -153,19 +149,16 @@ private:
 
 template<class Proxy>
 class ProxyHashTable
-    : protected detail::binary_node_segregator<
-        foonathan::memory::unordered_map_node_size<std::pair<const EntityId_t, Proxy*> >::value>
+    : protected detail::binary_node_segregator<memory_unordered_map_node_size<EntityId_t, Proxy*>()>
     , public foonathan::memory::unordered_map<
         EntityId_t,
         Proxy*,
-        detail::binary_node_segregator<
-            foonathan::memory::unordered_map_node_size<std::pair<const EntityId_t, Proxy*> >::value>
+        detail::binary_node_segregator<memory_unordered_map_node_size<EntityId_t, Proxy*>()>
         >
 {
 public:
 
-    using allocator_type = detail::binary_node_segregator<
-        foonathan::memory::unordered_map_node_size<std::pair<const EntityId_t, Proxy*> >::value>;
+    using allocator_type = detail::binary_node_segregator<memory_unordered_map_node_size<EntityId_t, Proxy*>()>;
     using base_class = foonathan::memory::unordered_map<EntityId_t, Proxy*, allocator_type>;
 
     explicit ProxyHashTable(

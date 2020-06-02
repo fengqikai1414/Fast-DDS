@@ -112,6 +112,24 @@ constexpr std::size_t memory_map_node_size()
 #endif
 }
 
+/**
+ * A helper to calculate the node size of a std::unordered_map<K, V>
+ *
+ * @tparam K   Type for the key of the std::unordered_map
+ * @tparam V   Type for the value of the std::unordered_map
+ *
+ * @return The node size for std::unordered_map<K, V>
+ */
+template <typename K, typename V>
+constexpr std::size_t memory_unordered_map_node_size()
+{
+#ifdef FOONATHAN_MEMORY_NO_NODE_SIZE
+    return sizeof(std::unordered_map<K, V>::value_type) + std::integral_constant<std::size_t, 32>::value;
+#else
+    return foonathan::memory::unordered_map_node_size<std::unordered_map<K, V>::value_type>::value;
+#endif
+}
+
 }  // namespace fastrtps
 }  // namespace eprosima
 
