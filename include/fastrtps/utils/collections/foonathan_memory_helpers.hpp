@@ -90,7 +90,7 @@ constexpr std::size_t memory_set_node_size()
     return sizeof(std::set<T>::value_type) + std::integral_constant<std::size_t, 32>::value;
 #else
     return foonathan::memory::set_node_size<std::set<T>::value_type>::value;
-#endif
+#endif /* FOONATHAN_MEMORY_NO_NODE_SIZE */
 }
 
 /**
@@ -109,7 +109,7 @@ constexpr std::size_t memory_map_node_size()
     return sizeof(map_node_t) + std::integral_constant<std::size_t, 32>::value;
 #else
     return foonathan::memory::map_node_size<map_node_t>::value;
-#endif
+#endif /* FOONATHAN_MEMORY_NO_NODE_SIZE */
 }
 
 /**
@@ -127,7 +127,7 @@ constexpr std::size_t memory_unordered_map_node_size()
     return sizeof(std::unordered_map<K, V>::value_type) + std::integral_constant<std::size_t, 32>::value;
 #else
     return foonathan::memory::unordered_map_node_size<std::unordered_map<K, V>::value_type>::value;
-#endif
+#endif /* FOONATHAN_MEMORY_NO_NODE_SIZE*/
 }
 
 }  // namespace fastrtps

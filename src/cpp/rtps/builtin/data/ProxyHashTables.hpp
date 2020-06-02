@@ -179,7 +179,6 @@ public:
         base_class::clear();
         allocator_type::is_being_destroyed();
     }
-
 };
 
 } // namespace rtps
