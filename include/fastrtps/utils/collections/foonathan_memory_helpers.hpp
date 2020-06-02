@@ -93,6 +93,25 @@ constexpr std::size_t memory_set_node_size()
 #endif
 }
 
+/**
+ * A helper to calculate the node size of a std::map<K, V>
+ *
+ * @tparam K   Type for the key of the std::map
+ * @tparam V   Type for the value of the std::map
+ *
+ * @return The node size for std::map<K, V>
+ */
+template <typename K, typename V>
+constexpr std::size_t memory_map_node_size()
+{
+    using map_node_t = std::pair<std::size_t, std::map<K, V>::value_type>;
+#ifdef FOONATHAN_MEMORY_NO_NODE_SIZE
+    return sizeof(map_node_t) + std::integral_constant<std::size_t, 32>::value;
+#else
+    return foonathan::memory::map_node_size<map_node_t>::value;
+#endif
+}
+
 }  // namespace fastrtps
 }  // namespace eprosima
 
